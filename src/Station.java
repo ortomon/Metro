@@ -6,17 +6,18 @@ public class Station {
     private String name;
     private Station previousStation = null;
     private Station nextStation = null;
-    private Duration travelTime; // время перегона только до следующей станции
+    private Duration travelTime;
     private Line line;
     private Set<Station> transferStations = new HashSet<>();
     private Metro metro;
 
-    public Station(String name, Line line, Set<Station> transferStations) {
+    public Station(String name, Line line, Set<Station> transferStations, Metro metro) {
         this.name = name;
         this.line = line;
         if (transferStations != null) {
             this.transferStations.addAll(transferStations);
         }
+        this.metro = metro;
     }
 
     public String getName() {
@@ -51,6 +52,10 @@ public class Station {
         }
 
         return colors.toString();
+    }
+
+    public void setPreviousStation(Station previousStation) {
+        this.previousStation = previousStation;
     }
 
     @Override

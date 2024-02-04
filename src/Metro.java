@@ -1,8 +1,8 @@
+import components.LineColor;
 import exceptions.ColorLineNotExistException;
 import exceptions.DuplicateColorLineException;
 import exceptions.DuplicateStationNameException;
 import exceptions.LineIsNotEmptyException;
-
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,113 +17,77 @@ public class Metro {
 
     public void createLine(LineColor color) throws DuplicateColorLineException {
         if (isExistColorLine(color)) {
-            throw new DuplicateColorLineException(color.getName());
+            throw new DuplicateColorLineException(color);
         }
 
         Line line = new Line(color, this);
         lines.add(line);
     }
 
-    // -Линия с таким цветом существует
-    // -Станции с таким именем не существует во всех линиях.
-    // -Внутри линии нет станций
-    public void createFirstStationLine(LineColor color, String name, Set<Station> transferStations) throws ColorLineNotExistException, DuplicateStationNameException, LineIsNotEmptyException {
-        Line targetLine = null;
+    public void createFirstStationLine(LineColor color, String name, Set<Station> transferStations)
+            throws ColorLineNotExistException, DuplicateStationNameException, LineIsNotEmptyException {
+        Line targetLine = findLine(color);
+        isExistNameStation(name);
 
-        // - Линия с таким цветом существует
-        for (Line line : lines) {
-            if (line.getColor().equals(color)) {
-                targetLine = line;
-                break;
-            }
-        }
-
-        // -Линия с таким цветом не нашлась
-        if (targetLine == null) {
-            throw new ColorLineNotExistException(color.getName());
-        }
-
-
-        if (isExistNameStation(name)) {
-            throw new DuplicateStationNameException(name);
-        }
-
-        if (!linesIsEmpty(color)) {
+        if (!linesIsEmpty(targetLine)) {
             throw new LineIsNotEmptyException();
         }
 
-        Station firstStation = new Station(name, targetLine, transferStations);
-        targetLine.getStations().add(firstStation);
+        createStation(targetLine, name, transferStations);
     }
 
-    public void createLastStation(LineColor color, String name, Duration travelTime, Set<Station> transferStations) throws ColorLineNotExistException, DuplicateStationNameException {
-        Line targetLine = null;
+    public void createLastStation(LineColor color, String name, Set<Station> transferStations, Duration travelTime)
+            throws ColorLineNotExistException, DuplicateStationNameException {
+        Line targetLine = findLine(color);
+        isExistNameStation(name);
 
-        for (Line line : lines) {
-            if (line.getColor().equals(color)) {
-                targetLine = line;
-                break;
-            } else {
-                throw new ColorLineNotExistException(color.getName());
-            }
-        }
-
-        if (isExistNameStation(name)) {
-            throw new DuplicateStationNameException(name);
-        }
-
-        if (linesIsEmpty(color)) {
+        if (linesIsEmpty(targetLine)) {
             System.out.println("не существует первой станции");
+            //throw new exeption
         }
 
         if (travelTime.isZero()) {
-            System.out.println("время перегона меньше или равно 0");
-
-            //            throw new DuplicateStationNameException(name);
+            System.out.println("время перегона должно быть больше 0");
+            //throw new exeption
         }
 
-        if (targetLine != null) {
-            for (Station previousStation : targetLine.getStations()) {
-                if (previousStation.getNextStation() == null) {
-                    previousStation.setTravelTime(travelTime);
-                    Station lastStation = new Station(name, targetLine, transferStations);
-                    targetLine.getStations().add(lastStation);
-                    previousStation.setNextStation(lastStation);
-                }
-            }
-        }
+        Station stationWithoutNext = targetLine.getStationWithoutNext();
+        Station newStation = createStation(targetLine, name, transferStations);
+        stationWithoutNext.setTravelTime(travelTime);
+        stationWithoutNext.setNextStation(newStation);
+        newStation.setPreviousStation(stationWithoutNext);
     }
 
-    private boolean linesIsEmpty(LineColor color) {
-        for (Line line : lines) {
-            if (line.getColor().equals(color)) {
-                if (line.getStations().isEmpty()) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    private Station createStation(Line line, String name, Set<Station> transferStations) {
+        Station station = new Station(name, line, transferStations, this);
+        line.addStation(station);
+        return station;
+    }
+
+    private Line findLine(LineColor color) throws ColorLineNotExistException {
+        return lines.stream()
+                .filter(line -> line.getColor().equals(color))
+                .findAny()
+                .orElseThrow(() -> new ColorLineNotExistException(color));
+    }
+
+    private boolean linesIsEmpty(Line line) {
+        return line.getStations().isEmpty();
     }
 
     private boolean isExistColorLine(LineColor color) {
-        for (Line line : lines) {
-            if (line.getColor().equals(color)) {
-                return true;
-            }
-        }
-        return false;
+        return lines.stream()
+                .anyMatch(line -> line.getColor().equals(color));
     }
 
-    private boolean isExistNameStation(String name) {
-        for (Line line : lines) {
-            for (Station station : line.getStations()) {
-                if (station.getName().equals(name)) {
-                    return true;
-                }
-            }
-        }
+    private void isExistNameStation(String name) throws DuplicateStationNameException {
+        boolean result  = lines.stream().
+                anyMatch(line -> line.getStations().stream().
+                        anyMatch(station -> station.getName().equals(name)));
 
-        return false;
+        if (result) {
+            throw new DuplicateStationNameException(name);
+        }
     }
 
     @Override

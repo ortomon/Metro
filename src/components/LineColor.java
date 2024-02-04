@@ -1,3 +1,5 @@
+package components;
+
 public enum LineColor {
     RED("Красный"),
     BLUE("Синий");

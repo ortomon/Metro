@@ -1,15 +1,29 @@
+import components.LineColor;
+
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
 public class Line {
     private LineColor color;
-    private Set<Station> stations = new LinkedHashSet<>();
-    private Metro metro; // ссылкa на метро в которой линия находится.
+    private Set<Station> stations = new HashSet<>();
+    private Metro metro;
 
     public Line(LineColor color, Metro metro) {
         this.color = color;
         this.metro = metro;
+    }
+
+    public void addStation(Station station) {
+        stations.add(station);
+    }
+
+    public Station getStationWithoutNext() {
+        return stations.stream()
+                .filter(station -> station.getNextStation() == null)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
