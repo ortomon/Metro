@@ -1,23 +1,27 @@
+package org.javaacadmey.metro.components;
+
+import java.time.Duration;
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Station {
     private String name;
-    private Station previousStation = null;
-    private Station nextStation = null;
+    private Station previousStation;
+    private Station nextStation;
     private Duration travelTime;
     private Line line;
     private Set<Station> transferStations = new HashSet<>();
     private Metro metro;
 
-    public Station(String name, Line line, Set<Station> transferStations, Metro metro) {
+    public Station(String name, Line line, Metro metro) {
         this.name = name;
         this.line = line;
-        if (transferStations != null) {
-            this.transferStations.addAll(transferStations);
-        }
         this.metro = metro;
+    }
+
+    public void addTransferStations(Set<Station> transferStations) {
+        this.transferStations.addAll(transferStations);
     }
 
     public String getName() {
@@ -40,22 +44,22 @@ public class Station {
         this.travelTime = travelTime;
     }
 
+    public void setPreviousStation(Station previousStation) {
+        this.previousStation = previousStation;
+    }
+
     private String changeLinesColor() {
         StringBuilder colors = new StringBuilder();
 
-        if (this.transferStations != null && !this.transferStations.isEmpty()) {
-            for (Station station : this.transferStations) {
-                if (station.line != null) {
-                    colors.append(station.line.getColor()).append(". ");
-                }
+        if (transferStations != null && !transferStations.isEmpty()) {
+            for (Station station : transferStations) {
+                colors.append(station.line.getColor().getName()).append('\'');
             }
+        } else {
+            colors.append("null");
         }
 
         return colors.toString();
-    }
-
-    public void setPreviousStation(Station previousStation) {
-        this.previousStation = previousStation;
     }
 
     @Override

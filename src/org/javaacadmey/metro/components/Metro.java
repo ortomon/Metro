@@ -1,8 +1,10 @@
-import components.LineColor;
-import exceptions.ColorLineNotExistException;
-import exceptions.DuplicateColorLineException;
-import exceptions.DuplicateStationNameException;
-import exceptions.LineIsNotEmptyException;
+package org.javaacadmey.metro.components;
+
+import org.javaacadmey.metro.exceptions.ColorLineNotExistException;
+import org.javaacadmey.metro.exceptions.DuplicateColorLineException;
+import org.javaacadmey.metro.exceptions.DuplicateStationNameException;
+import org.javaacadmey.metro.exceptions.LineIsNotEmptyException;
+
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,22 +26,44 @@ public class Metro {
         lines.add(line);
     }
 
-    public void createFirstStationLine(LineColor color, String name, Set<Station> transferStations)
+    public Station createFirstStationLine(LineColor color, String name)
             throws ColorLineNotExistException, DuplicateStationNameException, LineIsNotEmptyException {
-        Line targetLine = findLine(color);
-        isExistNameStation(name);
+        return helpCreateFirstStationLine(color, name);
+    }
+
+    public Station createFirstStationLine(LineColor color, String name, Set<Station> transferStations)
+            throws ColorLineNotExistException, DuplicateStationNameException, LineIsNotEmptyException {
+        Station newStation = helpCreateFirstStationLine(color, name);
+        newStation.addTransferStations(transferStations);
+        return newStation;
+    }
+
+    public Station createLastStation(LineColor color, String name, Duration travelTime)
+            throws ColorLineNotExistException, DuplicateStationNameException {
+        return helpCreateLastStation(color, name, travelTime);
+    }
+
+    public Station createLastStation(LineColor color, String name, Duration travelTime, Set<Station> transferStations)
+            throws ColorLineNotExistException, DuplicateStationNameException {
+        Station newStation = helpCreateLastStation(color, name, travelTime);
+        newStation.addTransferStations(transferStations);
+        return newStation;
+    }
+
+    private Station helpCreateFirstStationLine(LineColor color, String name)
+            throws LineIsNotEmptyException, ColorLineNotExistException, DuplicateStationNameException {
+        Line targetLine = findLineByColorAndIsExistNameStation(color, name);
 
         if (!linesIsEmpty(targetLine)) {
             throw new LineIsNotEmptyException();
         }
 
-        createStation(targetLine, name, transferStations);
+        return createStation(targetLine, name);
     }
 
-    public void createLastStation(LineColor color, String name, Set<Station> transferStations, Duration travelTime)
+    private Station helpCreateLastStation(LineColor color, String name, Duration travelTime)
             throws ColorLineNotExistException, DuplicateStationNameException {
-        Line targetLine = findLine(color);
-        isExistNameStation(name);
+        Line targetLine = findLineByColorAndIsExistNameStation(color, name);
 
         if (linesIsEmpty(targetLine)) {
             System.out.println("не существует первой станции");
@@ -51,15 +75,22 @@ public class Metro {
             //throw new exeption
         }
 
-        Station stationWithoutNext = targetLine.getStationWithoutNext();
-        Station newStation = createStation(targetLine, name, transferStations);
+        Station stationWithoutNext = targetLine.getLastStation();
+        Station newStation = createStation(targetLine, name);
         stationWithoutNext.setTravelTime(travelTime);
         stationWithoutNext.setNextStation(newStation);
         newStation.setPreviousStation(stationWithoutNext);
+        return newStation;
     }
 
-    private Station createStation(Line line, String name, Set<Station> transferStations) {
-        Station station = new Station(name, line, transferStations, this);
+    private Line findLineByColorAndIsExistNameStation(LineColor color, String name)
+            throws ColorLineNotExistException, DuplicateStationNameException {
+        isExistNameStation(name);
+        return findLine(color);
+    }
+
+    private Station createStation(Line line, String name) {
+        Station station = new Station(name, line, this);
         line.addStation(station);
         return station;
     }

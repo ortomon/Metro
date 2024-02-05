@@ -1,8 +1,8 @@
-package components;
+package org.javaacadmey.metro.components;
 
 public enum LineColor {
-    RED("Красный"),
-    BLUE("Синий");
+    RED("Красная"),
+    BLUE("Синяя");
 
     private String name;
 

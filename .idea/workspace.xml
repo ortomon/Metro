@@ -5,14 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="239f22d7-7654-448f-b8b7-28b9687b4df7" name="Changes" comment="add 1 step">
+      <change afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/Runner.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/components/Line.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/components/Metro.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/components/Station.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/City.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/components/City.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Line.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Line.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/LineColor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/LineColor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Metro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Metro.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Runner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Runner.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Station.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Station.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/exceptions/ColorLineNotExistException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/exceptions/ColorLineNotExistException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/exceptions/DuplicateColorLineException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/exceptions/DuplicateColorLineException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/LineColor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/components/LineColor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/exceptions/ColorLineNotExistException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/exceptions/ColorLineNotExistException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/exceptions/DuplicateColorLineException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/exceptions/DuplicateColorLineException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/exceptions/DuplicateStationNameException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/exceptions/DuplicateStationNameException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/exceptions/LineIsNotEmptyException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/exceptions/LineIsNotEmptyException.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,15 +46,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "onboarding.tips.debug.path": "/Users/alinaartamonova/IdeaProjects/Metro/src/Main.java",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;/Users/alinaartamonova/IdeaProjects/Metro/src/Main.java&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="" />
@@ -78,7 +85,15 @@
       <option name="project" value="LOCAL" />
       <updated>1707042252469</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="add 1 step">
+      <option name="closed" value="true" />
+      <created>1707074149619</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1707074149619</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

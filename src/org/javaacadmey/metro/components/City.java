@@ -1,3 +1,5 @@
+package org.javaacadmey.metro.components;
+
 public enum City {
     PERM("Пермь");
 

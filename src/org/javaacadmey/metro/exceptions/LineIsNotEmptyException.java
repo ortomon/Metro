@@ -1,4 +1,4 @@
-package exceptions;
+package org.javaacadmey.metro.exceptions;
 
 public class LineIsNotEmptyException extends Exception{
     public LineIsNotEmptyException() {

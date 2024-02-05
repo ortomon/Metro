@@ -1,13 +1,10 @@
-import components.LineColor;
+package org.javaacadmey.metro.components;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class Line {
     private LineColor color;
-    private Set<Station> stations = new HashSet<>();
+    private List<Station> stations = new LinkedList<>();
     private Metro metro;
 
     public Line(LineColor color, Metro metro) {
@@ -19,11 +16,8 @@ public class Line {
         stations.add(station);
     }
 
-    public Station getStationWithoutNext() {
-        return stations.stream()
-                .filter(station -> station.getNextStation() == null)
-                .findFirst()
-                .orElse(null);
+    public Station getLastStation() {
+        return stations.get(stations.size() - 1);
     }
 
     @Override
@@ -43,7 +37,7 @@ public class Line {
         return color;
     }
 
-    public Set<Station> getStations() {
+    public List<Station> getStations() {
         return stations;
     }
 
