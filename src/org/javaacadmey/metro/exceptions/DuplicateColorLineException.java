@@ -1,6 +1,6 @@
 package org.javaacadmey.metro.exceptions;
 
-import org.javaacadmey.metro.components.LineColor;
+import org.javaacadmey.metro.metro.components.line.LineColor;
 
 public class DuplicateColorLineException extends Exception {
     public DuplicateColorLineException(LineColor color) {

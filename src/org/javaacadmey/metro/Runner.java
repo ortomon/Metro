@@ -1,46 +1,79 @@
 package org.javaacadmey.metro;
 
-import org.javaacadmey.metro.components.City;
-import org.javaacadmey.metro.components.LineColor;
-import org.javaacadmey.metro.components.Metro;
-import org.javaacadmey.metro.components.Station;
+import org.javaacadmey.metro.metro.helpers.CheckedConsumer;
+import org.javaacadmey.metro.metro.helpers.CheckedSupplier;
+import org.javaacadmey.metro.metro.components.City;
+import org.javaacadmey.metro.metro.components.line.LineColor;
+import org.javaacadmey.metro.metro.Metro;
+import org.javaacadmey.metro.metro.components.Station;
 import org.javaacadmey.metro.exceptions.ColorLineNotExistException;
 import org.javaacadmey.metro.exceptions.DuplicateColorLineException;
 import org.javaacadmey.metro.exceptions.DuplicateStationNameException;
 import org.javaacadmey.metro.exceptions.LineIsNotEmptyException;
 
 import java.time.Duration;
-import java.util.Set;
+import java.util.HashSet;
 
 public class Runner {
     public static void main(String[] args) {
-        Metro metro = new Metro(City.PERM);
+        // время перегона для redLine
+        Duration travelTimeSport = Duration.ofMinutes(2).plusSeconds(21);
+        Duration travelTimeMed = Duration.ofMinutes(1).plusSeconds(58);
+        Duration travelTimeMolod = Duration.ofMinutes(3);
+        Duration travelTimePerm1 = Duration.ofMinutes(2).plusSeconds(10);
+        Duration travelTimePerm2 = Duration.ofMinutes(4).plusSeconds(26);
 
+        // время перегона для blueLine
+        Duration travelTimePatsan = Duration.ofMinutes(1).plusSeconds(30);
+        Duration travelTimeKir = Duration.ofMinutes(1).plusSeconds(47);
+        Duration travelTimeTyazh = Duration.ofMinutes(3).plusSeconds(19);
+        Duration travelTimeNizhn = Duration.ofMinutes(1).plusSeconds(48);
+
+        Metro metro = new Metro(City.PERM);
+        executeSafely(() -> metro.createLine(LineColor.RED));
+        executeSafely(() -> metro.createLine(LineColor.BLUE));
+
+        executeSafely(() -> metro.createFirstStationLine(LineColor.RED, "Спортивная"));
+        executeSafely(() -> metro.createLastStation(LineColor.RED, "Медведковская", travelTimeSport));
+        executeSafely(() -> metro.createLastStation(LineColor.RED, "Молодежная", travelTimeMed));
+        Station perm1 = executeSafely(() -> metro.createLastStation(LineColor.RED, "Пермь 1", travelTimeMolod));
+        executeSafely(() -> metro.createLastStation(LineColor.RED, "Пермь 2", travelTimePerm1));
+        executeSafely(() -> metro.createLastStation(LineColor.RED, "Дворец Культуры", travelTimePerm2));
+
+        executeSafely(() -> metro.createFirstStationLine(LineColor.BLUE, "Пацанская"));
+        executeSafely(() -> metro.createLastStation(LineColor.BLUE, "Улица Кирова", travelTimePatsan));
+        HashSet<Station> tyazhmashTransferStations = createTransferStation(perm1);
+        Station tyazhmash = executeSafely(() -> metro.createLastStation(LineColor.BLUE, "Тяжмаш", travelTimeKir, tyazhmashTransferStations));
+        executeSafely(() -> metro.createLastStation(LineColor.BLUE, "Нижнекамская", travelTimeTyazh));
+        executeSafely(() -> metro.createLastStation(LineColor.BLUE, "Соборная", travelTimeNizhn));
+
+        if (perm1 != null) {
+            perm1.addTransferStations(createTransferStation(tyazhmash));
+        }
+
+        System.out.println(metro);
+    }
+
+    private static HashSet<Station> createTransferStation(Station station) {
+        HashSet<Station> stations = new HashSet<>();
+        stations.add(station);
+        return stations;
+    }
+
+    private static <T extends Station> T executeSafely(CheckedSupplier<T> supplier) {
         try {
-            metro.createLine(LineColor.RED);
-            metro.createLine(LineColor.BLUE);
+            return supplier.get();
+        } catch (ColorLineNotExistException | DuplicateStationNameException | LineIsNotEmptyException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    private static void executeSafely(CheckedConsumer consumer) {
+        try {
+            consumer.accept();
         } catch (DuplicateColorLineException e) {
             System.out.println(e.getMessage());
         }
-
-        try {
-            metro.createFirstStationLine(LineColor.RED, "Спортивная");
-            metro.createLastStation(LineColor.RED, "Медведковская", Duration.ofMinutes(2).plusSeconds(21));
-            metro.createLastStation(LineColor.RED, "Молодежная", Duration.ofMinutes(1).plusSeconds(58));
-            Station perm1 = metro.createLastStation(LineColor.RED, "Пермь 1", Duration.ofMinutes(3));
-            metro.createLastStation(LineColor.RED, "Пермь 2", Duration.ofMinutes(2).plusSeconds(10));
-            metro.createLastStation(LineColor.RED, "Дворец Культуры", Duration.ofMinutes(4).plusSeconds(26));
-
-            metro.createFirstStationLine(LineColor.BLUE, "Пацанская");
-            metro.createLastStation(LineColor.BLUE, "Улица Кирова", Duration.ofMinutes(1).plusSeconds(30));
-            Station tyazhmash = metro.createLastStation(LineColor.BLUE, "Тяжмаш", Duration.ofMinutes(1).plusSeconds(47), Set.of(perm1));
-            metro.createLastStation(LineColor.BLUE, "Нижнекамская", Duration.ofMinutes(3).plusSeconds(19));
-            metro.createLastStation(LineColor.BLUE, "Соборная", Duration.ofMinutes(1).plusSeconds(48));
-
-            perm1.addTransferStations(Set.of(tyazhmash));
-        } catch (ColorLineNotExistException | DuplicateStationNameException | LineIsNotEmptyException e) {
-            System.out.println(e.getMessage());
-        }
-        System.out.println("добавила по первой станции: " + metro);
     }
 }

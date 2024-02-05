@@ -1,4 +1,7 @@
-package org.javaacadmey.metro.components;
+package org.javaacadmey.metro.metro.components.line;
+
+import org.javaacadmey.metro.metro.Metro;
+import org.javaacadmey.metro.metro.components.Station;
 
 import java.util.*;
 

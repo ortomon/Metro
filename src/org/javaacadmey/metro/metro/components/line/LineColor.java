@@ -1,4 +1,4 @@
-package org.javaacadmey.metro.components;
+package org.javaacadmey.metro.metro.components.line;
 
 public enum LineColor {
     RED("Красная"),

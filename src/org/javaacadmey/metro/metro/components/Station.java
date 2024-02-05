@@ -1,6 +1,8 @@
-package org.javaacadmey.metro.components;
+package org.javaacadmey.metro.metro.components;
 
-import java.time.Duration;
+import org.javaacadmey.metro.metro.Metro;
+import org.javaacadmey.metro.metro.components.line.Line;
+
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,7 +23,9 @@ public class Station {
     }
 
     public void addTransferStations(Set<Station> transferStations) {
-        this.transferStations.addAll(transferStations);
+        if (transferStations != null && !transferStations.isEmpty()) {
+            this.transferStations.addAll(transferStations);
+        }
     }
 
     public String getName() {

@@ -1,9 +1,13 @@
-package org.javaacadmey.metro.components;
+package org.javaacadmey.metro.metro;
 
 import org.javaacadmey.metro.exceptions.ColorLineNotExistException;
 import org.javaacadmey.metro.exceptions.DuplicateColorLineException;
 import org.javaacadmey.metro.exceptions.DuplicateStationNameException;
 import org.javaacadmey.metro.exceptions.LineIsNotEmptyException;
+import org.javaacadmey.metro.metro.components.City;
+import org.javaacadmey.metro.metro.components.line.Line;
+import org.javaacadmey.metro.metro.components.line.LineColor;
+import org.javaacadmey.metro.metro.components.Station;
 
 import java.time.Duration;
 import java.util.HashSet;
@@ -26,32 +30,27 @@ public class Metro {
         lines.add(line);
     }
 
-    public Station createFirstStationLine(LineColor color, String name)
-            throws ColorLineNotExistException, DuplicateStationNameException, LineIsNotEmptyException {
+    public Station createFirstStationLine(LineColor color, String name) throws ColorLineNotExistException, DuplicateStationNameException, LineIsNotEmptyException {
         return helpCreateFirstStationLine(color, name);
     }
 
-    public Station createFirstStationLine(LineColor color, String name, Set<Station> transferStations)
-            throws ColorLineNotExistException, DuplicateStationNameException, LineIsNotEmptyException {
+    public Station createFirstStationLine(LineColor color, String name, Set<Station> transferStations) throws ColorLineNotExistException, DuplicateStationNameException, LineIsNotEmptyException {
         Station newStation = helpCreateFirstStationLine(color, name);
         newStation.addTransferStations(transferStations);
         return newStation;
     }
 
-    public Station createLastStation(LineColor color, String name, Duration travelTime)
-            throws ColorLineNotExistException, DuplicateStationNameException {
+    public Station createLastStation(LineColor color, String name, Duration travelTime) throws ColorLineNotExistException, DuplicateStationNameException {
         return helpCreateLastStation(color, name, travelTime);
     }
 
-    public Station createLastStation(LineColor color, String name, Duration travelTime, Set<Station> transferStations)
-            throws ColorLineNotExistException, DuplicateStationNameException {
+    public Station createLastStation(LineColor color, String name, Duration travelTime, Set<Station> transferStations) throws ColorLineNotExistException, DuplicateStationNameException {
         Station newStation = helpCreateLastStation(color, name, travelTime);
         newStation.addTransferStations(transferStations);
         return newStation;
     }
 
-    private Station helpCreateFirstStationLine(LineColor color, String name)
-            throws LineIsNotEmptyException, ColorLineNotExistException, DuplicateStationNameException {
+    private Station helpCreateFirstStationLine(LineColor color, String name) throws LineIsNotEmptyException, ColorLineNotExistException, DuplicateStationNameException {
         Line targetLine = findLineByColorAndIsExistNameStation(color, name);
 
         if (!linesIsEmpty(targetLine)) {
@@ -61,8 +60,7 @@ public class Metro {
         return createStation(targetLine, name);
     }
 
-    private Station helpCreateLastStation(LineColor color, String name, Duration travelTime)
-            throws ColorLineNotExistException, DuplicateStationNameException {
+    private Station helpCreateLastStation(LineColor color, String name, Duration travelTime) throws ColorLineNotExistException, DuplicateStationNameException {
         Line targetLine = findLineByColorAndIsExistNameStation(color, name);
 
         if (linesIsEmpty(targetLine)) {
@@ -77,14 +75,15 @@ public class Metro {
 
         Station stationWithoutNext = targetLine.getLastStation();
         Station newStation = createStation(targetLine, name);
+
         stationWithoutNext.setTravelTime(travelTime);
         stationWithoutNext.setNextStation(newStation);
         newStation.setPreviousStation(stationWithoutNext);
+
         return newStation;
     }
 
-    private Line findLineByColorAndIsExistNameStation(LineColor color, String name)
-            throws ColorLineNotExistException, DuplicateStationNameException {
+    private Line findLineByColorAndIsExistNameStation(LineColor color, String name) throws ColorLineNotExistException, DuplicateStationNameException {
         isExistNameStation(name);
         return findLine(color);
     }
@@ -113,8 +112,7 @@ public class Metro {
 
     private void isExistNameStation(String name) throws DuplicateStationNameException {
         boolean result  = lines.stream().
-                anyMatch(line -> line.getStations().stream().
-                        anyMatch(station -> station.getName().equals(name)));
+                anyMatch(line -> line.getStations().stream().anyMatch(station -> station.getName().equals(name)));
 
         if (result) {
             throw new DuplicateStationNameException(name);

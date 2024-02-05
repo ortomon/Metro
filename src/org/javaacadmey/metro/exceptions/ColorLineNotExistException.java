@@ -1,6 +1,6 @@
 package org.javaacadmey.metro.exceptions;
 
-import org.javaacadmey.metro.components.LineColor;
+import org.javaacadmey.metro.metro.components.line.LineColor;
 
 public class ColorLineNotExistException extends Exception{
     public ColorLineNotExistException(LineColor color) {
