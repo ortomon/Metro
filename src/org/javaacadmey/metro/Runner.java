@@ -13,6 +13,9 @@ import org.javaacadmey.metro.exceptions.LineIsNotEmptyException;
 
 import java.time.Duration;
 import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Predicate;
 
 public class Runner {
     public static void main(String[] args) {
@@ -42,22 +45,21 @@ public class Runner {
 
         executeSafely(() -> metro.createFirstStationLine(LineColor.BLUE, "Пацанская"));
         executeSafely(() -> metro.createLastStation(LineColor.BLUE, "Улица Кирова", travelTimePatsan));
-        HashSet<Station> tyazhmashTransferStations = createTransferStation(perm1);
-        Station tyazhmash = executeSafely(() -> metro.createLastStation(LineColor.BLUE, "Тяжмаш", travelTimeKir, tyazhmashTransferStations));
+
+        Predicate<Station> isStationNull = Objects::isNull;
+
+        if (!isStationNull.test(perm1)) {
+            Station tyazhmash = executeSafely(() -> metro.createLastStation(LineColor.BLUE, "Тяжмаш", travelTimeKir, Set.of(perm1)));
+
+            if (!isStationNull.test(tyazhmash)) {
+                perm1.addTransferStations(Set.of(tyazhmash));
+            }
+        }
+
         executeSafely(() -> metro.createLastStation(LineColor.BLUE, "Нижнекамская", travelTimeTyazh));
         executeSafely(() -> metro.createLastStation(LineColor.BLUE, "Соборная", travelTimeNizhn));
 
-        if (perm1 != null) {
-            perm1.addTransferStations(createTransferStation(tyazhmash));
-        }
-
         System.out.println(metro);
-    }
-
-    private static HashSet<Station> createTransferStation(Station station) {
-        HashSet<Station> stations = new HashSet<>();
-        stations.add(station);
-        return stations;
     }
 
     private static <T extends Station> T executeSafely(CheckedSupplier<T> supplier) {

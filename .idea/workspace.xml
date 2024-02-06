@@ -5,17 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="239f22d7-7654-448f-b8b7-28b9687b4df7" name="Changes" comment="add 1 step">
-      <change afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/CheckedSupplier.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/metro/CheckedConsumer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/javaacadmey/metro/Runner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/Runner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/javaacadmey/metro/components/City.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/metro/components/City.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/javaacadmey/metro/components/Line.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/metro/components/line/Line.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/javaacadmey/metro/components/LineColor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/metro/components/line/LineColor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/javaacadmey/metro/components/Metro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/metro/Metro.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/javaacadmey/metro/components/Station.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/metro/components/Station.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/javaacadmey/metro/exceptions/ColorLineNotExistException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/exceptions/ColorLineNotExistException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/javaacadmey/metro/exceptions/DuplicateColorLineException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/javaacadmey/metro/exceptions/DuplicateColorLineException.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +89,15 @@
       <option name="project" value="LOCAL" />
       <updated>1707146682661</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="add 1 step">
+      <option name="closed" value="true" />
+      <created>1707157435517</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1707157435517</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
