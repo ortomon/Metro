@@ -6,6 +6,6 @@ import org.javaacadmey.metro.exceptions.LineIsNotEmptyException;
 import org.javaacadmey.metro.metro.components.Station;
 
 @FunctionalInterface
-public interface CheckedSupplier<T extends Station> {
-    T get() throws ColorLineNotExistException, DuplicateStationNameException, LineIsNotEmptyException;
+public interface CheckedSupplier {
+    Station get() throws ColorLineNotExistException, DuplicateStationNameException, LineIsNotEmptyException;
 }

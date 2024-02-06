@@ -62,7 +62,7 @@ public class Runner {
         System.out.println(metro);
     }
 
-    private static <T extends Station> T executeSafely(CheckedSupplier<T> supplier) {
+    private static Station executeSafely(CheckedSupplier supplier) {
         try {
             return supplier.get();
         } catch (ColorLineNotExistException | DuplicateStationNameException | LineIsNotEmptyException e) {
