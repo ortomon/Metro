@@ -111,8 +111,9 @@ public class Metro {
     }
 
     private void isExistNameStation(String name) throws DuplicateStationNameException {
-        boolean result  = lines.stream().
-                anyMatch(line -> line.getStations().stream().anyMatch(station -> station.getName().equals(name)));
+        boolean result  = lines.stream()
+                .flatMap(line -> line.getStations().stream())
+                .anyMatch(station -> station.getName().equals(name));
 
         if (result) {
             throw new DuplicateStationNameException(name);
