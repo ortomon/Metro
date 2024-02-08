@@ -13,7 +13,7 @@ public class Station {
     private Station nextStation;
     private Duration travelTime;
     private Line line;
-    private Set<Station> transferStations = new HashSet<>();
+    private Set<Station> transferStations;
     private Metro metro;
 
     public Station(String name, Line line, Metro metro) {
@@ -24,6 +24,7 @@ public class Station {
 
     public void addTransferStations(Set<Station> transferStations) {
         if (transferStations != null && !transferStations.isEmpty()) {
+            this.transferStations = new HashSet<>();
             this.transferStations.addAll(transferStations);
         }
     }
@@ -50,6 +51,14 @@ public class Station {
 
     public void setPreviousStation(Station previousStation) {
         this.previousStation = previousStation;
+    }
+
+    public Set<Station> getTransferStations() {
+        return transferStations;
+    }
+
+    public Line getLine() {
+        return line;
     }
 
     private String changeLinesColor() {
