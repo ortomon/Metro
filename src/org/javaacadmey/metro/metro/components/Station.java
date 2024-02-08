@@ -4,6 +4,7 @@ import org.javaacadmey.metro.metro.Metro;
 import org.javaacadmey.metro.metro.components.line.Line;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ public class Station {
     private Line line;
     private Set<Station> transferStations;
     private Metro metro;
+    private TicketOffice ticketOffice = new TicketOffice();;
 
     public Station(String name, Line line, Metro metro) {
         this.name = name;
@@ -27,6 +29,12 @@ public class Station {
             this.transferStations = new HashSet<>();
             this.transferStations.addAll(transferStations);
         }
+    }
+
+    public void sellTicket(LocalDateTime dateTime, String startStationName, String endStationName) {
+        int countRuns = metro.countRunsBetweenStations(startStationName, endStationName);
+        double price = countRuns * 5 + 20;
+        ticketOffice.addCheck(dateTime, price);
     }
 
     public String getName() {
@@ -55,6 +63,10 @@ public class Station {
 
     public Set<Station> getTransferStations() {
         return transferStations;
+    }
+
+    public Station getPreviousStation() {
+        return previousStation;
     }
 
     public Line getLine() {

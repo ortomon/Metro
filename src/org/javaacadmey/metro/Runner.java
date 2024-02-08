@@ -1,14 +1,11 @@
 package org.javaacadmey.metro;
 
-import org.javaacadmey.metro.metro.components.City;
 import org.javaacadmey.metro.metro.components.line.LineColor;
 import org.javaacadmey.metro.metro.Metro;
 import org.javaacadmey.metro.metro.components.Station;
 
 import java.time.Duration;
-import java.util.Objects;
 import java.util.Set;
-import java.util.function.Predicate;
 
 public class Runner {
     public static void main(String[] args) {
@@ -43,5 +40,6 @@ public class Runner {
         metro.createLastStation(LineColor.BLUE, "Соборная", travelTimeNizhn);
 
         perm1.addTransferStations(Set.of(tyazhmash));
+        System.out.println(metro);
     }
 }

@@ -1,6 +1,6 @@
 package org.javaacadmey.metro.metro;
 
-import org.javaacadmey.metro.metro.components.City;
+import org.javaacadmey.metro.City;
 import org.javaacadmey.metro.metro.components.line.Line;
 import org.javaacadmey.metro.metro.components.line.LineColor;
 import org.javaacadmey.metro.metro.components.Station;
@@ -20,7 +20,7 @@ public class Metro {
 
     public void createLine(LineColor color) {
         if (isExistColorLine(color)) {
-            throw new RuntimeException("Линия с таким цветом уже существует");
+            throw new IllegalArgumentException("Линия с таким цветом уже существует");
         }
 
         Line line = new Line(color, this);
@@ -47,15 +47,92 @@ public class Metro {
         return newStation;
     }
 
-    public Optional<Station> findTransferStation(Line fromLine, Line toLine) throws Exception {
+    public Station findTransferStation(Line fromLine, Line toLine) {
         return fromLine.getStations().stream()
                 .flatMap(station -> station.getTransferStations().stream())
                 .filter(station -> station != null && station.getLine().equals(toLine))
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("не существует станции для пересадки"));
+    }
+
+    public int countRunsBetweenStations(String startStationName, String endStationName) {
+        Station startStation = findStationByName(startStationName)
+                .orElseThrow(() -> new IllegalArgumentException("не сущетсвует станции с названием: " + startStationName));
+        Station endStation = findStationByName(endStationName)
+                .orElseThrow(() -> new IllegalArgumentException("не сущетсвует станции с названием: " + endStationName));
+
+        if (startStation.equals(endStation)) {
+            throw new IllegalArgumentException("начальная станция не может совпадать с конечной.");
+        }
+
+        Line startLine = startStation.getLine();
+        Line endLine = endStation.getLine();
+
+        if (startLine.equals(endLine)) {
+            return countRunsBetweenStations(startStation, endStation);
+        }
+
+        // станция для пересадки в начальной линии
+        Station transferStartStation = findTransferStation(startStation.getLine(), endStation.getLine());
+
+        // станция для пересадки в конечной линии
+        Station transferEndStation = findTransferStation(endStation.getLine(), startStation.getLine());
+
+        int countStartLine = countRunsBetweenStations(startStation, transferEndStation);
+        int countEndLine = countRunsBetweenStations(transferEndStation, endStation);
+        return countStartLine + countEndLine;
+    }
+
+    private int countRunsBetweenStations(Station startStation, Station endStation) {
+        int forward = countRunsForNextStation(startStation, endStation);
+
+        if (forward != -1) {
+            return forward;
+        }
+
+        int back = countRunsForPreviousStation(startStation, endStation);
+
+        if (back != -1) {
+            return back;
+        }
+
+        throw new IllegalArgumentException("Нет пути из станции " + startStation.getName() + " в станцию " + endStation.getName());
+    }
+
+    private int countRunsForNextStation(Station startStation, Station endStation) {
+        int count = 0;
+        Station currentStation = startStation.getNextStation();
+
+        while (currentStation != null && !currentStation.equals(endStation)) {
+            currentStation = currentStation.getNextStation();
+            count++;
+        }
+
+        if (currentStation == null) {
+            return -1;
+        }
+
+        return count + 1;
+    }
+
+    private int countRunsForPreviousStation(Station startStation, Station endStation) {
+        int count = 0;
+        Station currentStation = startStation.getPreviousStation();
+
+        while (currentStation != null && !currentStation.equals(endStation)) {
+            currentStation = currentStation.getPreviousStation();
+            count++;
+        }
+
+        if (currentStation == null) {
+            return -1;
+        }
+
+        return count + 1;
     }
 
     private Station helpCreateFirstStationLine(LineColor color, String name) {
-        Line targetLine = findLineByColorAndIsExistNameStation(color, name);
+        Line targetLine = helpCreateStation(color, name);
 
         if (!lineIsEmpty(targetLine)) {
             throw new RuntimeException("Внутри линии уже есть станции");
@@ -65,13 +142,14 @@ public class Metro {
     }
 
     private Station helpCreateLastStation(LineColor color, String name, Duration travelTime) {
-        Line targetLine = findLineByColorAndIsExistNameStation(color, name);
+        Line targetLine = helpCreateStation(color, name);
 
         if (lineIsEmpty(targetLine)) {
-            throw new RuntimeException("Внутри линии нет первой станции");        }
+            throw new RuntimeException("Внутри линии нет первой станции");
+        }
 
         if (travelTime.isZero()) {
-            throw new RuntimeException("время перегона должно быть больше 0");
+            throw new IllegalArgumentException("время перегона должно быть больше 0");
         }
 
         Station stationWithoutNext = targetLine.getLastStation();
@@ -84,8 +162,10 @@ public class Metro {
         return newStation;
     }
 
-    private Line findLineByColorAndIsExistNameStation(LineColor color, String name) {
-        isExistNameStation(name);
+    private Line helpCreateStation(LineColor color, String name) {
+        if (findStationByName(name).isPresent()) {
+            throw new IllegalArgumentException("Станция с названием " + name + " уже существует.");
+        }
         return findLine(color);
     }
 
@@ -99,7 +179,7 @@ public class Metro {
         return lines.stream()
                 .filter(line -> line.getColor().equals(color))
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("Линия с цветом " + color + " не существует."));
+                .orElseThrow(() -> new IllegalArgumentException("Линия с цветом " + color + " не существует."));
     }
 
     private boolean lineIsEmpty(Line line) {
@@ -111,14 +191,11 @@ public class Metro {
                 .anyMatch(line -> line.getColor().equals(color));
     }
 
-    private void isExistNameStation(String name) {
-        boolean result  = lines.stream()
+    public Optional<Station> findStationByName(String name) {
+        return lines.stream()
                 .flatMap(line -> line.getStations().stream())
-                .anyMatch(station -> station.getName().equals(name));
-
-        if (result) {
-            throw new RuntimeException("Станция с названием " + name + " уже существует.");
-        }
+                .filter(station -> station.getName().equals(name))
+                .findFirst();
     }
 
     @Override
