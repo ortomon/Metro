@@ -37,6 +37,23 @@ public class Station {
         ticketOffice.addCheck(dateTime, price);
     }
 
+    /**
+     * 3.1 В классе станция должна быть функция продажи проездного билета на месяц.
+     * На вход: дата продажи (java.util.LocalDate). Стоимость безлимитного проездного
+     * 3000 рублей на месяц. Метро генерирует номер проездного формата [a][0000-9999].
+     *
+     * Пример: первый номер абонемента - а0000, тысяча первый билет - a1001.
+     * Метро хранит список проданных абонементов и их дату окончания.
+     * Доход от продажи засчитывается в кассу продавшей станции.
+     */
+
+    public void sellAbonnement(LocalDateTime dateTime) {
+        double price = 3000;
+
+        ticketOffice.addCheck(dateTime, price);
+
+    }
+
     public String getName() {
         return name;
     }

@@ -47,7 +47,7 @@ public class Metro {
         return newStation;
     }
 
-    public Station findTransferStation(Line fromLine, Line toLine) {
+    private Station findTransferStation(Line fromLine, Line toLine) {
         return fromLine.getStations().stream()
                 .flatMap(station -> station.getTransferStations().stream())
                 .filter(station -> station != null && station.getLine().equals(toLine))
@@ -78,7 +78,7 @@ public class Metro {
         // станция для пересадки в конечной линии
         Station transferEndStation = findTransferStation(endStation.getLine(), startStation.getLine());
 
-        int countStartLine = countRunsBetweenStations(startStation, transferEndStation);
+        int countStartLine = countRunsBetweenStations(startStation, transferStartStation);
         int countEndLine = countRunsBetweenStations(transferEndStation, endStation);
         return countStartLine + countEndLine;
     }
@@ -191,7 +191,7 @@ public class Metro {
                 .anyMatch(line -> line.getColor().equals(color));
     }
 
-    public Optional<Station> findStationByName(String name) {
+    private Optional<Station> findStationByName(String name) {
         return lines.stream()
                 .flatMap(line -> line.getStations().stream())
                 .filter(station -> station.getName().equals(name))
